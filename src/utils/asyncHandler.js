@@ -1,16 +1,15 @@
-const asyncHandler = (reqestHandler) => {
-    (req, res, next) => {
-        Promise.resolve(reqestHandler(req, res, next)).catch((err)=>next(err))
+// Define an asyncHandler function that takes a requestHandler as an argument
+const asyncHandler = (requestHandler) => {
+    // Return a new function that takes Express request, response, and next middleware function as arguments
+    return (req, res, next) => {
+        // Wrap the execution of requestHandler in a Promise and handle any errors
+        Promise.resolve(requestHandler(req, res, next))
+            .catch((err) => next(err))
     }
 }
 
-
-
-
-
-
-
-export {asyncHandler}
+// Export the asyncHandler function for use in other modules
+export { asyncHandler }
 
 
 
