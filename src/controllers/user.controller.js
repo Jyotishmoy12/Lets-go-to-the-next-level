@@ -54,7 +54,7 @@ If either condition is true (i.e., if there's a user with the given username OR 
 
 This $or query is used to check if a user already exists with either the provided username or the provided email. It's an efficient way to check both conditions in a single database query, rather than making separate queries for username and email.
     */
-   const existedUser=User.findOne({
+   const existedUser=await User.findOne({
         $or:[
             {username},
             {email}
@@ -67,7 +67,12 @@ This $or query is used to check if a user already exists with either the provide
     // 4 th step
     // Get the local path of the uploaded avatar and cover image files
      const avatarLocalPath=req.files?.avatar[0]?.path;
-     const coverImageLocalPath=req.files?.coverImage[0]?.path
+     //const coverImageLocalPath=req.files?.coverImage[0]?.path
+
+     let coverImageLocalPath;
+     if(req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length>0){
+        coverImageLocalPath=req.files.coverImage[0].path;
+     }
 
      if(!avatarLocalPath){
         throw new ApiError(400, "Avatar file is required");
@@ -97,7 +102,7 @@ This $or query is used to check if a user already exists with either the provide
    if(!createdUser){
     throw new ApiError(500, "Something went wrong while registering a user")
    }
-   return response.status(201).json(
+   return res.status(201).json(
     new ApiResponse(200, createdUser, "User registered successfully")
    )
 })
