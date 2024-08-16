@@ -20,7 +20,7 @@ const userSchema = new Schema({
         lowercase: true, // Convert email to lowercase
         trim: true, // Remove whitespace from both ends
     },
-    fullname: {
+    fullName: {
         type: String, // Full name is a string
         required: true, // Full name is required
         trim: true, // Remove whitespace from both ends
@@ -71,7 +71,7 @@ userSchema.methods.generateAccessToken = async function() {
             _id: this._id,
             email: this.email,
             username: this.username,
-            fullname: this.fullname,
+            fullName: this.fullName,
         },
         process.env.ACCESS_TOKEN_SECRET,
         {

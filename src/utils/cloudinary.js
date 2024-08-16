@@ -1,6 +1,6 @@
 import { v2 as cloudinary } from 'cloudinary';
 import fs from 'fs'; // fs is file system
-import { v2 as cloudinary } from 'cloudinary';
+
 
 
 
