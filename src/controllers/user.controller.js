@@ -18,12 +18,15 @@ const registerUser= asyncHandler(async(req, res)=>{
 
 
    // 1st step
+   // Extract user details from the request body
    const {fullName, email, username, password}=req.body;
    console.log("email", email)
    // 2nd step
 //    if(fullName==""){
 //     throw new ApiError(400, "Fullname is required")
 //    }
+    // Validate that all required fields are provided and not empty
+    //trim() is a string method that removes whitespace from both ends of a string.
     if(
         [fullName, email, username, password].some((field)=>
             field?.trim()=="")
@@ -34,6 +37,23 @@ const registerUser= asyncHandler(async(req, res)=>{
 
     // 3 rd step
     // returns the user if we are able to find one
+    // Check if a user with the same username or email already exists
+    /*
+This $or operator is performing a logical OR operation in the database query. Here's what it does:
+
+It tells MongoDB to find documents that match at least one of the conditions specified in the array.
+In this case, there are two conditions:
+
+{ username }: This is shorthand for { username: username }, where the right-side username is the variable from your code containing the user's input.
+{ email }: Similarly, this is shorthand for { email: email }.
+
+
+So, the query is essentially asking the database:
+"Find a user document where EITHER the username matches the provided username OR the email matches the provided email."
+If either condition is true (i.e., if there's a user with the given username OR a user with the given email), the query will return that user document.
+
+This $or query is used to check if a user already exists with either the provided username or the provided email. It's an efficient way to check both conditions in a single database query, rather than making separate queries for username and email.
+    */
    const existedUser=User.findOne({
         $or:[
             {username},
@@ -45,6 +65,7 @@ const registerUser= asyncHandler(async(req, res)=>{
     }
    
     // 4 th step
+    // Get the local path of the uploaded avatar and cover image files
      const avatarLocalPath=req.files?.avatar[0]?.path;
      const coverImageLocalPath=req.files?.coverImage[0]?.path
 
